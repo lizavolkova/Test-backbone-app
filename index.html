@@ -1,0 +1,154 @@
+<html lang="en">
+
+<head>
+
+		<meta charse="UTF-8">
+
+		<title>My test backbone app</title>
+
+		
+
+<style type="text/css">
+main {
+	padding: 10px;
+}
+ul {
+	list-style: none;
+	padding-left: 5px;
+}
+
+ul li {
+	list-style: none;
+}
+
+.productListItem {
+	width: 200px;
+	display: inline-block;
+	cursor: pointer;
+	text-align: center;
+}
+
+
+
+.productListItem img{
+	width: 100px;
+	height: auto;
+}
+/*
+.bgColorImage {
+	background-color: pink;
+}*/
+
+#site {
+	display: none;
+}
+
+#addToBagForm {
+	width: 100px;
+}
+
+.addToBag {
+	color: #fff;
+	background-color: #000;
+	font-weight: bold;
+	height: 50px;
+	width: 100px;
+	font-style: italic;
+	text-align: center;
+	margin-top: 10px;
+	padding-top: 13px;
+	cursor: pointer;
+}
+
+
+
+</style>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+</head>
+
+<body>
+<main>
+<h1>My Test Backbone App</h1>
+<div id="intro-copy">
+	<p>This is an app that lets you enter a product id and it return some basic information for that product. You can then add that product to your avon.com shopping bag. Here are a few product IDs you can try:</p>
+	<ul>
+		<li>460614</li>
+		<li>899730</li>
+		<li>198282</li>
+	</ul>
+</di>
+<div id="productList">
+
+</div>
+<form id="addToBagForm" action="#">
+<a href="#" target="_blank" id="addToBagLink"><div class="addToBag">Add to Bag</div></a>
+</form>
+
+<!--template for single product view.-->
+<script id="productElement" type="text/template">
+<form id="myform" action="#">
+<label for="idInput">Enter product id: </label>
+<input type="text" value="" id="idInput">
+<input type="Submit" value="Submit">
+</form>
+<div class="">
+	<img src="<%= img %>" alt="<%= name %>" class="image" width="150" height="150">
+	<ul class="product">
+		<li class="productInfo"><h3><%= Name %></h3></li>
+		<li class="productInfo fsc"><%= Fsc %></li>
+		<li class="productInfo">$<%= price %></li>
+		<li class="productInfo"><input type="checkbox" checked value="<%= Fsc %>"></li>
+		<li class="productInfo"><%= Description %></li>
+		<li class="productInfo"></li>
+	</ul>
+
+</div>
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script type="text/javascript" src="js/globalVars.js"></script>
+<script type="text/javascript" src="js/models/singleProduct.js"></script>
+<script type="text/javascript" src="js/views/singleProductView.js"></script>
+<script type="text/javascript" src="js/views/allProductsView.js"></script>
+<script type="text/javascript" src="js/collections/productCollection.js"></script>
+<script type="text/javascript" src="js/testApp.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+	//genereate add to bag link, given selected products
+    $('.addToBag').click(function(e){
+    	e.preventDefault();
+    	var fscs = ''
+    	//get FSCs of products that have been selected. Will only apply once there are more products to chose from
+    	$('input[type=checkbox]:checked').each(function() {
+    		 fscs += '/'+$(this).val();
+    	});
+
+    	//call the passtocart.php proxy endpoint to retrieve the correct shopping bag link
+    	$.ajax({
+    		url: 'http://bterra.net/skincare/passtocart.php'+fscs
+    	}).done(function(data) {
+    	//If "Add to Bag" button is clicked, open avon.com bag page with product(s)
+			$('#addToBagLink').attr("href", data);
+			window.open(data);
+    	});  		
+    });
+});
+</script>
+
+
+</main>
+</body>
+
+</html>
